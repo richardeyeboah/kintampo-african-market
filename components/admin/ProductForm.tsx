@@ -63,9 +63,19 @@ export function ProductForm({ initialData, productId }: Props) {
     const fd = new FormData()
     fd.append('file', prepared)
     const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-    const data = await res.json().catch(() => ({}) as { url?: string; error?: string })
+    const raw = await res.text()
+    let data: { url?: string; error?: string } = {}
+    try {
+      data = raw ? (JSON.parse(raw) as { url?: string; error?: string }) : {}
+    } catch {
+      data = {}
+    }
     if (!res.ok || !data.url) {
-      setError(data.error || `Upload failed (${res.status}).`)
+      const fallback =
+        raw && raw.length < 240 && !raw.trimStart().startsWith('<')
+          ? raw
+          : `Upload failed (${res.status}).`
+      setError(data.error || fallback)
       return null
     }
     return data.url
