@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, CreditCard, MapPin, RotateCcw, Truck } from 'lucide-react'
 import { createClientOptional } from '@/lib/supabase/server'
-import { fetchFrequentlyBoughtTogether } from '@/lib/supabase/products'
 import { isHiddenFromStorefront, filterStorefrontProducts } from '@/lib/catalog/public-product-filter'
 import { AddToCartButton } from '@/components/AddToCartButton'
 import { ProductStickyBar } from '@/components/store/ProductStickyBar'
@@ -11,7 +10,6 @@ import { ProductCard } from '@/components/ProductCard'
 import { RecordRecentlyViewed } from '@/components/store/RecordRecentlyViewed'
 import { RecentlyViewed } from '@/components/store/RecentlyViewed'
 import { BackToTop } from '@/components/store/BackToTop'
-import { FrequentlyBoughtTogether } from '@/components/store/FrequentlyBoughtTogether'
 import { ProductReviews } from '@/components/store/ProductReviews'
 import { ProductGallery } from '@/components/store/ProductGallery'
 import { WishlistButton } from '@/components/store/WishlistButton'
@@ -174,9 +172,8 @@ export default async function ProductPage({
   const product = await loadProduct(id)
   if (!product || isHiddenFromStorefront(product)) notFound()
 
-  const [related, fbt, variants] = await Promise.all([
+  const [related, variants] = await Promise.all([
     loadRelated(product.category, product.id),
-    fetchFrequentlyBoughtTogether(product.category, product.id, 3),
     loadVariants(product.variant_group),
   ])
 
@@ -285,8 +282,6 @@ export default async function ProductPage({
         </div>
 
       </div>
-
-      <FrequentlyBoughtTogether anchor={product} suggestions={fbt} />
 
       {related.length > 0 && (
         <section className="border-t border-earth-200 bg-white py-12 sm:py-16">
