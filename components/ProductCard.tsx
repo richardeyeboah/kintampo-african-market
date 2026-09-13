@@ -7,6 +7,7 @@ import { useCart } from '@/context/CartContext'
 import { useToast } from '@/context/ToastContext'
 import { ProductImage } from '@/components/store/ProductImage'
 import { WishlistButton } from '@/components/store/WishlistButton'
+import { ShareProductButton } from '@/components/store/ShareProductButton'
 import { Button } from '@/components/ui/button'
 import { ProductStockLabel } from '@/components/store/ProductStockLabel'
 import { packLabel, formatUnitPrice, effectiveInStock, lowStockCount } from '@/lib/product-pricing'
@@ -52,13 +53,18 @@ export function ProductCard({ product, priority }: { product: Product; priority?
             </span>
           )}
           <div
-            className="absolute right-2 top-2 z-10"
+            className="absolute right-2 top-2 z-10 flex flex-col gap-1.5"
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
             }}
           >
             <WishlistButton productId={product.id} compact />
+            <ShareProductButton
+              productId={product.id}
+              productName={product.name}
+              compact
+            />
           </div>
           <div className="product-image-frame">
             <div className="h-full w-full transition-transform duration-200 ease-out group-hover:scale-[1.03]">

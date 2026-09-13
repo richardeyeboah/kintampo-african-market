@@ -15,10 +15,13 @@ import { FrequentlyBoughtTogether } from '@/components/store/FrequentlyBoughtTog
 import { ProductReviews } from '@/components/store/ProductReviews'
 import { ProductGallery } from '@/components/store/ProductGallery'
 import { WishlistButton } from '@/components/store/WishlistButton'
+import { ShareProductButton } from '@/components/store/ShareProductButton'
 import { ProductStockLabel } from '@/components/store/ProductStockLabel'
 import { VariantSizePicker } from '@/components/store/VariantSizePicker'
 import { packLabel, formatUnitPrice, effectiveInStock } from '@/lib/product-pricing'
 import { isFashionCategory } from '@/lib/constants/categories'
+import { getPublicProductUrl } from '@/lib/product-url'
+import { getPublicSiteUrl } from '@/lib/site-url'
 import { formatMoney } from '@/lib/utils'
 import type { Product } from '@/types'
 
@@ -70,13 +73,13 @@ export async function generateMetadata({
     return { title: 'Product not found', robots: { index: false } }
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
-  const productUrl = `${siteUrl}/products/${product.id}`
+  const productUrl = getPublicProductUrl(product.id)
   const description = product.description ?? `${product.name} — ${product.category} from Kintampo African Market, Columbus OH.`
 
   return {
     title: product.name,
     description,
+    metadataBase: new URL(getPublicSiteUrl()),
     openGraph: {
       type: 'website',
       url: productUrl,
@@ -184,8 +187,8 @@ export default async function ProductPage({
         ? [product]
         : []
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
   const inStock = effectiveInStock(product)
+  const productUrl = getPublicProductUrl(product.id)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -195,7 +198,7 @@ export default async function ProductPage({
     brand: product.brand?.trim()
       ? { '@type': 'Brand', name: product.brand.trim() }
       : undefined,
-    url: `${siteUrl}/products/${product.id}`,
+    url: productUrl,
     offers: {
       '@type': 'Offer',
       priceCurrency: 'USD',
@@ -254,7 +257,10 @@ export default async function ProductPage({
               <h1 className="text-2xl font-semibold tracking-tight text-earth-900 sm:text-3xl lg:text-4xl">
                 {product.name}
               </h1>
-              <WishlistButton productId={product.id} />
+              <div className="flex shrink-0 items-center gap-2">
+                <ShareProductButton productId={product.id} productName={product.name} />
+                <WishlistButton productId={product.id} />
+              </div>
             </div>
 
             <ProductPurchaseBlock product={product} variants={variantList} />
