@@ -43,6 +43,7 @@ def main() -> None:
         "SessionVault.swift",
         "ViewModels.swift",
         "ImageCache.swift",
+        "StorefrontCatalog.swift",
     }
 
     stripe_package = uid("package:stripe")
@@ -78,6 +79,12 @@ def main() -> None:
     product_ios = uid("product:ios")
     product_mac = uid("product:mac")
     product_watch = uid("product:watch")
+    assets_ref = uid("assets:catalog")
+    privacy_ref = uid("privacy:manifest")
+    assets_build_ios = uid("assets:build:ios")
+    privacy_build_ios = uid("privacy:build:ios")
+    assets_build_mac = uid("assets:build:mac")
+    privacy_build_mac = uid("privacy:build:mac")
 
     lines: list[str] = []
     lines.append("// !$*UTF8*$!")
@@ -101,6 +108,10 @@ def main() -> None:
     for bw, fr in build_watch:
         name = next(k for k, v in file_refs.items() if v == fr)
         lines.append(f"\t\t{bw} /* {Path(name).name} in Sources */ = {{isa = PBXBuildFile; fileRef = {fr} /* {Path(name).name} */; }};")
+    lines.append(f"\t\t{assets_build_ios} /* Assets.xcassets in Resources */ = {{isa = PBXBuildFile; fileRef = {assets_ref} /* Assets.xcassets */; }};")
+    lines.append(f"\t\t{privacy_build_ios} /* PrivacyInfo.xcprivacy in Resources */ = {{isa = PBXBuildFile; fileRef = {privacy_ref} /* PrivacyInfo.xcprivacy */; }};")
+    lines.append(f"\t\t{assets_build_mac} /* Assets.xcassets in Resources */ = {{isa = PBXBuildFile; fileRef = {assets_ref} /* Assets.xcassets */; }};")
+    lines.append(f"\t\t{privacy_build_mac} /* PrivacyInfo.xcprivacy in Resources */ = {{isa = PBXBuildFile; fileRef = {privacy_ref} /* PrivacyInfo.xcprivacy */; }};")
     lines.append("/* End PBXBuildFile section */\n")
 
     # File refs
@@ -113,6 +124,8 @@ def main() -> None:
     lines.append(f"\t\t{info_mac} /* Info-macOS.plist */ = {{isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = \"Info-macOS.plist\"; sourceTree = \"<group>\"; }};")
     lines.append(f"\t\t{info_watch} /* Info.plist */ = {{isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = \"<group>\"; }};")
     lines.append(f"\t\t{config_ref} /* Config.xcconfig */ = {{isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = \"<group>\"; }};")
+    lines.append(f"\t\t{assets_ref} /* Assets.xcassets */ = {{isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = \"<group>\"; }};")
+    lines.append(f"\t\t{privacy_ref} /* PrivacyInfo.xcprivacy */ = {{isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = \"<group>\"; }};")
     lines.append(f"\t\t{product_ios} /* KintampoMarket.app */ = {{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KintampoMarket.app; sourceTree = BUILT_PRODUCTS_DIR; }};")
     lines.append(f"\t\t{product_mac} /* KintampoMarketMac.app */ = {{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KintampoMarketMac.app; sourceTree = BUILT_PRODUCTS_DIR; }};")
     lines.append(f"\t\t{product_watch} /* KintampoMarketWatch.app */ = {{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KintampoMarketWatch.app; sourceTree = BUILT_PRODUCTS_DIR; }};")
@@ -129,9 +142,11 @@ def main() -> None:
     watch_info_group = uid("group:watchinfo")
 
     lines.append("/* Begin PBXGroup section */")
+    resources_group = uid("group:resources")
     lines.append(f"\t\t{root_group} = {{isa = PBXGroup; children = ({km_group}, {watch_info_group}, {products_group}, {config_ref}); sourceTree = \"<group>\"; }};")
     lines.append(f"\t\t{products_group} /* Products */ = {{isa = PBXGroup; children = ({product_ios}, {product_mac}, {product_watch}); name = Products; sourceTree = \"<group>\"; }};")
     lines.append(f"\t\t{watch_info_group} /* KintampoMarketWatch */ = {{isa = PBXGroup; children = ({info_watch}); path = KintampoMarketWatch; sourceTree = \"<group>\"; }};")
+    lines.append(f"\t\t{resources_group} /* Resources */ = {{isa = PBXGroup; children = ({assets_ref}); path = Resources; sourceTree = \"<group>\"; }};")
 
     # Top KintampoMarket group children = subgroup ids + root-level swift + plists
     top_children = []
@@ -140,10 +155,12 @@ def main() -> None:
             continue
         # only direct subfolders of KintampoMarket
         if Path(g).parts[0] == "KintampoMarket" and len(Path(g).parts) == 2:
+            if Path(g).parts[1] == "Resources":
+                continue
             top_children.append(group_ids[g])
     for r in groups.get("KintampoMarket", []):
         top_children.append(file_refs[r])
-    top_children.extend([info_ios, info_mac])
+    top_children.extend([info_ios, info_mac, resources_group, privacy_ref])
     lines.append(
         f"\t\t{km_group} /* KintampoMarket */ = {{isa = PBXGroup; children = ({', '.join(top_children)}); path = KintampoMarket; sourceTree = \"<group>\"; }};"
     )
@@ -249,8 +266,9 @@ def main() -> None:
     for fid in (f_ios, f_mac, f_watch):
         frameworks = stripe_build if fid == f_ios else ""
         lines.append(f"\t\t{fid} = {{isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = ({frameworks}); runOnlyForDeploymentPostprocessing = 0; }};")
-    for rid in (r_ios, r_mac, r_watch):
-        lines.append(f"\t\t{rid} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; }};")
+    lines.append(f"\t\t{r_ios} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ({assets_build_ios}, {privacy_build_ios}); runOnlyForDeploymentPostprocessing = 0; }};")
+    lines.append(f"\t\t{r_mac} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ({assets_build_mac}, {privacy_build_mac}); runOnlyForDeploymentPostprocessing = 0; }};")
+    lines.append(f"\t\t{r_watch} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; }};")
 
     lines.append(f"\t\t{dep} = {{isa = PBXTargetDependency; target = {t_ios}; targetProxy = {proxy}; }};")
     lines.append(f"\t\t{proxy} = {{isa = PBXContainerItemProxy; containerPortal = {proj}; proxyType = 1; remoteGlobalIDString = {t_ios}; remoteInfo = KintampoMarket; }};")
@@ -313,9 +331,9 @@ def main() -> None:
 
     for cid, name, settings in [
         (d_ios_d, "Debug", target_settings("KintampoMarket/Info.plist", "com.kintampoafricanmarket.app", "KintampoMarket", "iphoneos",
-            "\t\t\t\tIPHONEOS_DEPLOYMENT_TARGET = 17.0;\n\t\t\t\tSUPPORTED_PLATFORMS = \"iphoneos iphonesimulator\";\n\t\t\t\tTARGETED_DEVICE_FAMILY = \"1,2\";")),
+            "\t\t\t\tASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;\n\t\t\t\tIPHONEOS_DEPLOYMENT_TARGET = 17.0;\n\t\t\t\tSUPPORTED_PLATFORMS = \"iphoneos iphonesimulator\";\n\t\t\t\tTARGETED_DEVICE_FAMILY = \"1,2\";")),
         (d_ios_r, "Release", target_settings("KintampoMarket/Info.plist", "com.kintampoafricanmarket.app", "KintampoMarket", "iphoneos",
-            "\t\t\t\tIPHONEOS_DEPLOYMENT_TARGET = 17.0;\n\t\t\t\tSUPPORTED_PLATFORMS = \"iphoneos iphonesimulator\";\n\t\t\t\tTARGETED_DEVICE_FAMILY = \"1,2\";")),
+            "\t\t\t\tASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;\n\t\t\t\tIPHONEOS_DEPLOYMENT_TARGET = 17.0;\n\t\t\t\tSUPPORTED_PLATFORMS = \"iphoneos iphonesimulator\";\n\t\t\t\tTARGETED_DEVICE_FAMILY = \"1,2\";")),
         (d_mac_d, "Debug", target_settings("\"KintampoMarket/Info-macOS.plist\"", "com.kintampoafricanmarket.app.mac", "KintampoMarketMac", "macosx",
             "\t\t\t\tMACOSX_DEPLOYMENT_TARGET = 14.0;")),
         (d_mac_r, "Release", target_settings("\"KintampoMarket/Info-macOS.plist\"", "com.kintampoafricanmarket.app.mac", "KintampoMarketMac", "macosx",

@@ -6,6 +6,8 @@ SUPABASE_ANON_KEY = your_anon_key_here
 SITE_URL = https:/$()/kintampoafricanmarket.com
 LOCAL_SITE_URL = http:/$()/localhost:3001
 STRIPE_PUBLISHABLE_KEY = pk_test_your_key_here
+// Optional — leave blank until Apple Pay is set up in Apple Developer + Stripe Dashboard
+APPLE_PAY_MERCHANT_ID =
 SUPPORT_EMAIL = you@example.com
 MERCHANT_ORDER_EMAIL = you@example.com
 STORE_PHONE = 6143778297

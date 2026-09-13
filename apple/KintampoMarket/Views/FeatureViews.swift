@@ -119,7 +119,7 @@ struct CheckoutView: View {
                 }
 
                 Section {
-                    Button(isSubmitting ? "Please wait…" : (pendingPaymentID.isEmpty ? "Pay with card" : "Check previous payment")) {
+                    Button(isSubmitting ? "Please wait…" : (pendingPaymentID.isEmpty ? "Continue to payment" : "Check previous payment")) {
                         Task { await startPayment() }
                     }
                     .disabled(isSubmitting || cart.items.isEmpty)

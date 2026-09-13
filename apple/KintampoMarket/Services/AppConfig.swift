@@ -43,6 +43,8 @@ enum AppConfig {
     }
 
     static var stripePublishableKey: String { info("STRIPE_PUBLISHABLE_KEY") }
+    /// Empty until Apple Pay merchant ID is registered in Apple Developer + Stripe.
+    static var applePayMerchantId: String { info("APPLE_PAY_MERCHANT_ID") }
     static var supportEmail: String { info("SUPPORT_EMAIL") }
     static var merchantOrderEmail: String { info("MERCHANT_ORDER_EMAIL") }
     static var storePhone: String { info("STORE_PHONE") }

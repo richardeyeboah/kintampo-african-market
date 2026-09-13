@@ -2,10 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSAppTransportSecurity</key>
-    <dict><key>NSAllowsLocalNetworking</key><true/></dict>
-    <key>CFBundleURLTypes</key>
-    <array><dict><key>CFBundleURLSchemes</key><array><string>kintampo</string></array></dict></array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kintampo</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -36,6 +46,8 @@
 	<string>$(LOCAL_SITE_URL)</string>
 	<key>STRIPE_PUBLISHABLE_KEY</key>
 	<string>$(STRIPE_PUBLISHABLE_KEY)</string>
+	<key>APPLE_PAY_MERCHANT_ID</key>
+	<string>$(APPLE_PAY_MERCHANT_ID)</string>
 	<key>SUPPORT_EMAIL</key>
 	<string>$(SUPPORT_EMAIL)</string>
 	<key>MERCHANT_ORDER_EMAIL</key>

@@ -58,8 +58,9 @@ final class CatalogStore {
         defer { isLoading = false }
 
         do {
-            // One wider fetch; filter locally for instant category/search.
-            products = try await SupabaseService.shared.fetchProducts(limit: 200, listMode: true)
+            // Wide list fetch; filter test SKUs; search/category stay local for snappy UI.
+            let fetched = try await SupabaseService.shared.fetchProducts(limit: 500, listMode: true)
+            products = StorefrontCatalog.visible(fetched)
             lastFetchedAt = Date()
         } catch {
             errorMessage = error.localizedDescription
