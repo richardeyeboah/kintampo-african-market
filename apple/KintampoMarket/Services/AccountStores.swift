@@ -1,0 +1,170 @@
+import Foundation
+import Observation
+
+@Observable
+@MainActor
+final class AuthStore {
+    static let shared = AuthStore()
+
+    var accessToken: String?
+    var userId: String?
+    var email: String = ""
+    var profile: UserProfile?
+    var isSignedIn: Bool { accessToken != nil && !(accessToken?.isEmpty ?? true) }
+
+    private init() {
+        // The old build saved only an access token, which cannot renew a session.
+        for key in ["lqam-auth-token", "lqam-auth-user", "lqam-auth-email"] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+        Task { await hydrate() }
+    }
+
+    func validAccessToken() async throws -> String? {
+        do {
+            guard let session = try await SupabaseService.shared.validSession() else {
+                accessToken = nil
+                userId = nil
+                email = ""
+                profile = nil
+                return nil
+            }
+            accessToken = session.accessToken
+            userId = session.userId
+            email = session.email
+            return session.accessToken
+        } catch {
+            if case AppError.unauthorized = error { await signOut() }
+            throw error
+        }
+    }
+
+    func hydrate() async {
+        do {
+            _ = try await validAccessToken()
+            if let userId { profile = try await SupabaseService.shared.fetchProfile(userID: userId) }
+        } catch {
+            if case AppError.unauthorized = error { await signOut() }
+        }
+    }
+
+    func signIn(email: String, password: String) async throws {
+        let result = try await SupabaseService.shared.signInWithSession(email: email, password: password)
+        accessToken = result.accessToken
+        userId = result.userId
+        self.email = result.email
+        profile = try? await SupabaseService.shared.fetchProfile(userID: result.userId)
+    }
+
+    func signUp(email: String, password: String, firstName: String, lastName: String, phone: String) async throws {
+        try await APIClient.shared.signUp(
+            email: email,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            phone: phone
+        )
+        try await signIn(email: email, password: password)
+    }
+
+    func signOut() async {
+        accessToken = nil
+        userId = nil
+        email = ""
+        profile = nil
+        await SupabaseService.shared.signOut()
+        await WishlistStore.shared.refresh()
+    }
+
+    func updateProfile(fullName: String, phone: String) async throws {
+        guard let userId else { throw AppError.unauthorized }
+        try await SupabaseService.shared.updateProfile(userID: userId, fullName: fullName, phone: phone)
+        profile = try await SupabaseService.shared.fetchProfile(userID: userId)
+    }
+
+
+}
+
+@Observable
+@MainActor
+final class WishlistStore {
+    static let shared = WishlistStore()
+    private(set) var productIDs: Set<String> = []
+    private(set) var products: [Product] = []
+    private(set) var isLoading = false
+
+    func contains(_ id: String) -> Bool { productIDs.contains(id) }
+
+    func refresh() async {
+        guard AuthStore.shared.isSignedIn else {
+            productIDs = []
+            products = []
+            return
+        }
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            let rows = try await SupabaseService.shared.fetchWishlist()
+            productIDs = Set(rows.map(\.productId))
+            let ids = Array(productIDs)
+            if ids.isEmpty {
+                products = []
+            } else {
+                products = try await SupabaseService.shared.fetchProductsByIDs(ids)
+            }
+        } catch {
+            // keep last known
+        }
+    }
+
+    func toggle(_ product: Product) async {
+        guard AuthStore.shared.isSignedIn else { return }
+        do {
+            if contains(product.id) {
+                try await SupabaseService.shared.removeFromWishlist(productID: product.id)
+                productIDs.remove(product.id)
+                products.removeAll { $0.id == product.id }
+            } else {
+                try await SupabaseService.shared.addToWishlist(productID: product.id)
+                productIDs.insert(product.id)
+                if !products.contains(where: { $0.id == product.id }) {
+                    products.insert(product, at: 0)
+                }
+            }
+        } catch {
+            // ignore
+        }
+    }
+}
+
+@Observable
+@MainActor
+final class RecentlyViewedStore {
+    static let shared = RecentlyViewedStore()
+    private let key = "lqam-recently-viewed"
+    private let maxCount = 12
+    private(set) var products: [Product] = []
+
+    private init() { load() }
+
+    func record(_ product: Product) {
+        products.removeAll { $0.id == product.id }
+        products.insert(product, at: 0)
+        if products.count > maxCount {
+            products = Array(products.prefix(maxCount))
+        }
+        persist()
+    }
+
+    private func load() {
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let decoded = try? JSONDecoder().decode([Product].self, from: data)
+        else { return }
+        products = decoded
+    }
+
+    private func persist() {
+        guard let data = try? JSONEncoder().encode(products) else { return }
+        UserDefaults.standard.set(data, forKey: key)
+    }
+}

@@ -1,0 +1,84 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/
+
+# next.js (when on OneDrive Windows, distDir may redirect to %LOCALAPPDATA%/lovely-queen-market/.next)
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.claude/
+.DS_Store
+*.pem
+_commitmsg.txt
+build-log.txt
+.vercel-build-out.txt
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (secrets — never commit)
+.env*
+!.env.example
+
+# Local product dump from Chuck and Rich (do not commit)
+/data/products-export.json
+Lovely-Queen-env-reference.pdf
+.env-export-temp.html
+
+# Local scratch dumps — contains real customer data (orders/profiles/addresses), never commit
+/tmp/
+
+# vercel
+.vercel
+
+# Scratch / local experiments — never commit (Stripe SDK clones, DerivedData, etc.)
+/work/
+
+# Native SwiftUI app (sidecar — does not affect Vercel site deploy)
+/apple/Config.xcconfig
+/apple/DerivedData/
+/apple/build/
+
+# Capacitor native app (sidecar — does not affect Vercel site deploy)
+/mobile/node_modules/
+/mobile/android/app/build/
+/mobile/android/.gradle/
+/mobile/android/local.properties
+/mobile/android/captures/
+/mobile/ios/App/Pods/
+/mobile/ios/DerivedData/
+
+# supabase local/cli
+supabase/.temp/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+.vercel
+
+.vercel
+.env*.local
+.env.vercel.tmp

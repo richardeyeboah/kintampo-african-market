@@ -1,0 +1,451 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: var(--font-montserrat), ui-sans-serif, sans-serif;
+  --font-display: var(--font-syne), var(--font-montserrat), ui-sans-serif, sans-serif;
+
+  /* Brand — market red (Ghana flag red at 600). Primary actions, prices, accents. */
+  --color-brand-50: #fef2f3;
+  --color-brand-100: #fde3e5;
+  --color-brand-200: #fbccd0;
+  --color-brand-300: #f7a3ab;
+  --color-brand-400: #f06e7c;
+  --color-brand-500: #e33f52;
+  --color-brand-600: #ce1126;
+  --color-brand-700: #ad0e20;
+  --color-brand-800: #8f101e;
+  --color-brand-900: #77121d;
+  --color-brand-950: #41060c;
+
+  /* Accent — marigold gold. Badges, highlights, deal tags. */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+  --color-accent-950: #451a03;
+
+  /* Luxury neutrals — never pure black. */
+  --color-earth-50: #fafafa;
+  --color-earth-100: #f5f5f5;
+  --color-earth-200: #e7e7e7;
+  --color-earth-300: #d4d4d4;
+  --color-earth-400: #a3a3a3;
+  --color-earth-500: #777777;
+  --color-earth-600: #525252;
+  --color-earth-700: #404040;
+  --color-earth-800: #2d2d2d;
+  --color-earth-900: #1f1f1f;
+  --color-earth-950: #171717;
+
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+
+  --color-cream: #fafafa;
+  --color-cream-dark: #f5f5f5;
+  --color-sand: #fafafa;
+  --color-sage: #f5f5f5;
+  --color-charcoal: #1f1f1f;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+
+  --shadow-card: 0 1px 2px rgb(31 31 31 / 0.025), 0 8px 24px rgb(31 31 31 / 0.035);
+  --shadow-card-hover: 0 12px 40px rgb(31 31 31 / 0.07);
+  --shadow-premium: 0 18px 55px rgb(31 31 31 / 0.08);
+  --shadow-soft: 0 8px 28px rgb(31 31 31 / 0.04);
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Sticky announcement + nav — keep hash targets readable */
+    scroll-padding-top: 7.5rem;
+    /* Prevent any rogue element from creating horizontal scroll on mobile Safari.
+       overflow-x: clip is preferred (doesn't break position: sticky); hidden is the fallback. */
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      scroll-padding-top: 5.5rem;
+    }
+  }
+
+  body {
+    @apply bg-earth-50 font-sans text-earth-900 antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+    overflow-x: clip;
+    /* Belt + suspenders for iOS Safari — prevents bounce-scroll exposing white space. */
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-sans font-semibold tracking-tight text-earth-900;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  a {
+    @apply text-brand-700 underline-offset-4 transition-colors duration-150 hover:text-brand-800;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+
+  ::selection {
+    background: var(--color-accent-200);
+    color: var(--color-earth-950);
+  }
+}
+
+@layer components {
+  .store-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Display lockup — Syne for brand wordmark / hero H1 only. */
+  .wordmark {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+  }
+
+  .hero-brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 0.92;
+  }
+
+  .page-section {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-earth-500;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold text-earth-900 sm:text-3xl lg:text-4xl;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+  }
+
+  .section-subtitle {
+    @apply mt-2 max-w-2xl text-[15px] leading-relaxed text-earth-600;
+  }
+
+  .premium-card {
+    @apply overflow-hidden rounded-2xl border border-earth-200 bg-white shadow-[var(--shadow-card)] transition-all duration-200;
+    transition-timing-function: var(--ease-out-quart);
+  }
+
+  .premium-card-hover {
+    @apply hover:-translate-y-0.5 hover:border-earth-300 hover:shadow-[var(--shadow-card-hover)];
+  }
+
+  .product-image-frame {
+    @apply relative aspect-square overflow-hidden bg-white;
+  }
+
+  .category-tile {
+    @apply relative block overflow-hidden rounded-2xl border border-earth-200 bg-white shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:border-earth-300 hover:shadow-[var(--shadow-card-hover)];
+  }
+
+  .glass-nav {
+    background-color: rgb(255 255 255 / 0.88);
+    backdrop-filter: saturate(140%) blur(16px);
+    -webkit-backdrop-filter: saturate(140%) blur(16px);
+  }
+
+  .form-label {
+    @apply mb-1.5 block text-sm font-medium text-earth-700;
+  }
+
+  .form-input {
+    /* text-base (16px) prevents iOS Safari from auto-zooming on focus; sm+ drops back to 14px */
+    @apply w-full rounded-xl border border-earth-200 bg-white px-4 py-3 text-base text-earth-900 shadow-[var(--shadow-card)] transition duration-200 placeholder:text-earth-400 focus:border-earth-400 focus:outline-none focus:ring-4 focus:ring-earth-900/5 sm:text-sm;
+  }
+
+  /*
+   * Narrow quantity field sitting between -/+ buttons. `form-input` cannot be
+   * reused: its px-4 padding plus the native spin buttons leave no room for the
+   * digits at this width, so the value renders clipped or invisible.
+   */
+  .stepper-input {
+    @apply rounded-xl border border-earth-200 bg-white px-1 text-center text-base tabular-nums text-earth-900 shadow-[var(--shadow-card)] transition duration-200 focus:border-earth-400 focus:outline-none focus:ring-4 focus:ring-earth-900/5 sm:text-sm;
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .stepper-input::-webkit-outer-spin-button,
+  .stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  .form-select {
+    @apply w-full appearance-none rounded-xl border border-earth-200 bg-white px-4 py-3 pr-10 text-base text-earth-900 shadow-[var(--shadow-card)] transition duration-200 focus:border-earth-400 focus:outline-none focus:ring-4 focus:ring-earth-900/5 sm:text-sm;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2378716c'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-size: 1rem;
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+  }
+
+  .auth-card {
+    @apply mx-auto max-w-md rounded-xl border border-earth-200 bg-white p-6 shadow-[var(--shadow-card)] sm:p-8;
+  }
+
+  .admin-shell {
+    @apply min-h-screen bg-slate-50 text-slate-900;
+  }
+
+  .admin-content {
+    @apply w-full px-4 pb-10 pt-24 sm:px-6 sm:pb-12 lg:ml-[248px] lg:w-[calc(100%-248px)] lg:px-8 lg:pt-24 xl:px-10;
+  }
+
+  .admin-card {
+    @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgb(15_23_42/0.04)] sm:p-6;
+  }
+
+  .admin-page-title {
+    @apply text-2xl font-semibold tracking-[-0.03em] text-slate-950 sm:text-[1.75rem];
+  }
+
+  .admin-section-title {
+    @apply text-base font-semibold tracking-[-0.01em] text-slate-950;
+  }
+
+  .admin-kpi {
+    @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgb(15_23_42/0.04)] sm:p-5;
+  }
+
+  .admin-kpi-label {
+    @apply text-[11px] font-medium text-slate-500;
+  }
+
+  .admin-kpi-value {
+    @apply mt-2 text-2xl font-semibold tracking-[-0.03em] tabular-nums text-slate-950 sm:text-[1.75rem];
+  }
+
+  .admin-kpi-delta {
+    @apply mt-1.5 text-xs font-medium tabular-nums;
+  }
+
+  .admin-table-wrap {
+    @apply overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgb(15_23_42/0.04)];
+  }
+
+  .admin-table {
+    @apply w-full border-collapse text-[13px];
+  }
+
+  .admin-table thead th {
+    @apply sticky top-0 z-10 border-0 border-b border-slate-200 bg-slate-50/90 px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500;
+  }
+
+  .admin-table tbody td {
+    @apply border-0 border-b border-slate-100 px-4 py-3.5 align-middle text-slate-700;
+  }
+
+  .admin-table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .admin-table tbody tr {
+    @apply transition-colors duration-150 hover:bg-slate-50/80;
+  }
+
+  .admin-status-pill {
+    @apply inline-flex min-h-11 items-center gap-1 rounded-lg px-2.5 py-2 text-[11px] font-semibold;
+  }
+
+  .stack > * + * {
+    @apply mt-4;
+  }
+
+  .row {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .error {
+    @apply text-sm font-medium text-red-700;
+  }
+
+  .success {
+    @apply text-sm font-medium text-green-700;
+  }
+
+  .muted {
+    @apply text-sm text-earth-500;
+  }
+
+  fieldset {
+    @apply mb-6 rounded-xl border border-earth-200 bg-white p-5 shadow-[var(--shadow-card)];
+  }
+
+  legend {
+    @apply px-1 text-sm font-semibold text-brand-800;
+  }
+
+  table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  th,
+  td {
+    @apply border border-earth-200 px-3 py-2 text-left align-top;
+  }
+
+  th {
+    @apply bg-earth-50 font-semibold text-earth-700;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden bg-earth-100;
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(255 255 255 / 0.6) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.2s linear infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.18s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.18s ease-out both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.2s ease-out;
+}
+
+.animate-pop {
+  animation: pop 0.18s var(--ease-out-quart);
+}
+
+.animate-slide-up {
+  animation: slide-up 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

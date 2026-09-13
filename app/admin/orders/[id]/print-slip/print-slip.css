@@ -1,0 +1,98 @@
+@media print {
+  .admin-shell > header,
+  .admin-order-notifier,
+  .print-slip-toolbar {
+    display: none !important;
+  }
+
+  .admin-content {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .admin-shell {
+    background: white !important;
+    min-height: auto !important;
+  }
+
+  .print-slip-page {
+    padding: 0 !important;
+  }
+
+  .print-slip-doc {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---------------------------------------------------------------
+     4x6 thermal label (100mm x 150mm).
+     Keep the pickup-counter block, but compact it so the order number
+     and bag list still fit.
+     --------------------------------------------------------------- */
+  body.paper-label .pickup-ticket-email {
+    display: none !important;
+  }
+
+  body.paper-label .pickup-ticket-store {
+    margin-top: 2mm !important;
+    padding: 2mm !important;
+    font-size: 8pt !important;
+    line-height: 1.25 !important;
+  }
+
+  body.paper-label .pickup-ticket-store p {
+    margin: 0 !important;
+  }
+
+  body.paper-label .pickup-ticket-eyebrow {
+    font-size: 8pt !important;
+  }
+
+  body.paper-label .pickup-ticket-hero {
+    padding: 3mm !important;
+    margin-top: 2mm !important;
+  }
+
+  body.paper-label .pickup-ticket-number {
+    font-size: 34pt !important;
+    line-height: 1 !important;
+  }
+
+  body.paper-label .pickup-ticket-name {
+    font-size: 15pt !important;
+    margin-top: 2mm !important;
+  }
+
+  body.paper-label .pickup-ticket-phone {
+    font-size: 12pt !important;
+  }
+
+  body.paper-label .pickup-ticket-meta,
+  body.paper-label .pickup-ticket-contents {
+    margin-top: 2.5mm !important;
+    padding-top: 2mm !important;
+    gap: 1mm !important;
+    font-size: 9.5pt !important;
+  }
+
+  body.paper-label .pickup-ticket-contents li {
+    font-size: 10.5pt !important;
+  }
+}
+
+/* Cleaner slip page on screen — hide admin nav while viewing slip */
+body.admin-print-slip-page .admin-shell > header,
+body.admin-print-slip-page .admin-order-notifier {
+  display: none;
+}
+
+body.admin-print-slip-page .admin-content {
+  max-width: 42rem;
+  margin-inline: auto;
+  padding-top: 1.5rem;
+}

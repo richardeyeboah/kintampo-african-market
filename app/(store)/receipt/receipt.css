@@ -1,0 +1,28 @@
+@media print {
+  /* Print only the receipt itself — no site chrome, no buttons. */
+  header,
+  footer,
+  nav,
+  .receipt-chrome,
+  .receipt-actions {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .receipt-doc {
+    border: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    margin: 0.6in;
+    size: letter portrait;
+  }
+}

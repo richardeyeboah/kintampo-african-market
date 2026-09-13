@@ -1,0 +1,20 @@
+// Template — copy to Config.xcconfig (gitignored) and fill from ../.env.local
+// URL // must be written as :/$()/
+
+SUPABASE_URL = https:/$()/YOUR_PROJECT.supabase.co
+SUPABASE_ANON_KEY = your_anon_key_here
+SITE_URL = https:/$()/kintampoafricanmarket.com
+LOCAL_SITE_URL = http:/$()/localhost:3001
+STRIPE_PUBLISHABLE_KEY = pk_test_your_key_here
+SUPPORT_EMAIL = you@example.com
+MERCHANT_ORDER_EMAIL = you@example.com
+STORE_PHONE = 6143778297
+WHATSAPP_NUMBER = 6143778297
+GOOGLE_SITE_VERIFICATION =
+SHIP_FROM_NAME = Kintampo African Market
+SHIP_FROM_CITY = Columbus
+SHIP_FROM_STATE = OH
+SHIP_FROM_COUNTRY = US
+SOCIAL_TIKTOK_URL =
+SOCIAL_FACEBOOK_URL =
+SOCIAL_INSTAGRAM_URL =

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Kintampo</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>SUPABASE_URL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>$(SUPABASE_ANON_KEY)</string>
+	<key>SITE_URL</key>
+	<string>$(SITE_URL)</string>
+	<key>LOCAL_SITE_URL</key>
+	<string>$(LOCAL_SITE_URL)</string>
+	<key>STRIPE_PUBLISHABLE_KEY</key>
+	<string>$(STRIPE_PUBLISHABLE_KEY)</string>
+	<key>SUPPORT_EMAIL</key>
+	<string>$(SUPPORT_EMAIL)</string>
+	<key>MERCHANT_ORDER_EMAIL</key>
+	<string>$(MERCHANT_ORDER_EMAIL)</string>
+	<key>STORE_PHONE</key>
+	<string>$(STORE_PHONE)</string>
+	<key>WHATSAPP_NUMBER</key>
+	<string>$(WHATSAPP_NUMBER)</string>
+	<key>GOOGLE_SITE_VERIFICATION</key>
+	<string>$(GOOGLE_SITE_VERIFICATION)</string>
+	<key>SHIP_FROM_NAME</key>
+	<string>$(SHIP_FROM_NAME)</string>
+	<key>SHIP_FROM_CITY</key>
+	<string>$(SHIP_FROM_CITY)</string>
+	<key>SHIP_FROM_STATE</key>
+	<string>$(SHIP_FROM_STATE)</string>
+	<key>SHIP_FROM_COUNTRY</key>
+	<string>$(SHIP_FROM_COUNTRY)</string>
+	<key>SOCIAL_TIKTOK_URL</key>
+	<string>$(SOCIAL_TIKTOK_URL)</string>
+	<key>SOCIAL_FACEBOOK_URL</key>
+	<string>$(SOCIAL_FACEBOOK_URL)</string>
+	<key>SOCIAL_INSTAGRAM_URL</key>
+	<string>$(SOCIAL_INSTAGRAM_URL)</string>
+	<key>WKCompanionAppBundleIdentifier</key>
+	<string>com.kintampoafricanmarket.app</string>
+</dict>
+</plist>

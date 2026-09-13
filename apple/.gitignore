@@ -1,0 +1,12 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+
+# Secrets — copy Config.example.xcconfig → Config.xcconfig
+Config.xcconfig
+
+# macOS
+.DS_Store
