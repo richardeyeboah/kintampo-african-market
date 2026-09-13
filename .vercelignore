@@ -7,3 +7,6 @@ public/images/categories/beverages.jpg
 
 # Native Apple / Xcode app — not part of the Next.js site build
 /apple/
+
+# Local scratch (Stripe SDK clones, DerivedData, etc.)
+/work/
