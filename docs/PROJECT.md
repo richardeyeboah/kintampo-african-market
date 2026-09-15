@@ -152,7 +152,7 @@ Key tables: `products`, `orders`, `order_items`, `profiles`, `addresses`, `check
 
 ### Vercel
 
-1. Connect GitHub repo `t4thick/chuck-and-rich`
+1. Connect GitHub repo `richardeyeboah/chuck-and-rich`
 2. Root directory: project root
 3. Set all production env vars
 4. Deploy from `main`
